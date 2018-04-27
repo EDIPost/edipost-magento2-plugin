@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="shipment" translate="label" sortOrder="306" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Edipost integration</label>
+            <tab>sales</tab>
+            <resource>Edipost_Shipment::shipment_config</resource>
+            <group id="settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Settings</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Module Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="api_endpoint" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API Endpoint</label>
+                </field>
+                <field id="api_token" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API Token</label>
+                </field>
+                <field id="username" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Username</label>
+                </field>
+                <field id="password" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Password</label>
+                </field>
+            </group>
+            <group id="printers" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Printer Settings</label>
+                <field id="print_engine" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Print Engine Status</label>
+                </field>
+                <field id="printer" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Label Printer</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="printer_rfid" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Label Printer(RFID)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <!--<comment>some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text.</comment>-->
+                </field>
+                <comment>
+                    <![CDATA[some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text.]]>
+                </comment>
+            </group>
+        </section>
+    </system>
+</config>
