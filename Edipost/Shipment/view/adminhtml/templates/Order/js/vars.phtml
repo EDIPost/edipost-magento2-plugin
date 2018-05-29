@@ -1,0 +1,16 @@
+<?php
+/**
+ *
+ *
+ */
+?>
+<script>
+    var EDIPOST_OPEN_EDIPOST_AJAX_URL = '<?php /* @escapeNotVerified */ echo ($block->getAjaxUrl())['open']; ?>',
+        EDIPOST_CREATE_SHIPMENT_AJAX_URL = '<?php /* @escapeNotVerified */ echo ($block->getAjaxUrl())['create']; ?>',
+        EDIPOST_ORDER_ID = <?php /* @escapeNotVerified */ echo $block->getIdOrder() ?>;
+
+    require([
+        'Edipost_Shipment/edipost/main/edipost'
+    ]);
+
+</script>

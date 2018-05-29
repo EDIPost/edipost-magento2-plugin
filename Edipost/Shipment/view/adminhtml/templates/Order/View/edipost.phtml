@@ -1,7 +1,21 @@
+<?php
+    if(!$block->isModuleEnable()){
+        return ;
+    }
+?>
 <section class="admin__page-section">
+    <?php $shipingMethods = $block->getShipingMethods(); ?>
+
+    <?php if($sError = $shipingMethods->error){ ?>
+        <div class="admin__page-section-title error">
+            <span class="title"><?=  $sError ?></span>
+        </div>
+    <?php } ?>
+
     <div class="admin__page-section-title">
         <span class="title"><?= /* @escapeNotVerified */ __('Edipost integration') ?></span>
     </div>
+
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-edipost-shipments">
             <div id="order_edipost_block" class="edit-shipments">
@@ -11,9 +25,9 @@
                         <label for="edipost_ship_method" class="admin__field-label"><?= /* @escapeNotVerified */ __('Chose shipping method') ?></label>
                         <div class="admin__field-control">
                             <select name="edipost[ship_method]" id="edipost_ship_method" class="admin__control-select">
-                                <option value="test1">test1</option>
-                                <option value="test2">test2</option>
-                                <option value="test3">test3</option>
+                                <?php foreach ($shipingMethods->options as $option){ ?>
+                                <option value="<?= $option['id'] ?>"><?= $option['name'] ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -28,10 +42,10 @@
                     <div class="admin__field">
 
                         <div class="order-edipost-shipments-actions">
-                            <button id="some_id1" title="Create shipment" type="button" class="action-default scalable action-save action-secondary" data-ui-id="widget-button-0">
+                            <button id="edipost-create" title="Create shipment" type="button" class="action-default scalable action-save action-secondary" data-ui-id="widget-button-0">
                                 <span><?= /* @escapeNotVerified */ __('Create shipment') ?></span>
                             </button>
-                            <button id="some_id2" title="Open in Edipost" type="button" class="action-default scalable action-save action-secondary" data-ui-id="widget-button-1">
+                            <button id="edipost-open"  title="Open in Edipost" type="button" class="action-default scalable action-save action-secondary" data-ui-id="widget-button-1">
                                 <span><?= /* @escapeNotVerified */ __('Open in Edipost') ?></span>
                             </button>
                         </div>

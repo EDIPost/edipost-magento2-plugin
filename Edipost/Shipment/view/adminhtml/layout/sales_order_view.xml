@@ -1,8 +1,17 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <!--<link src="Edipost_Shipment::js/bootstrap/edipost-index.js"/>-->
+    </head>
     <body>
+        <!--<referenceContainer name="require.js" before="js">-->
+            <!--<block name="edipost_js_vars" class="Edipost\Shipment\Block\Adminhtml\Order\View\Shipment" after="require.js" template="Edipost_Shipment::Order/js/vars.phtml"/>-->
+        <!--</referenceContainer>-->
+        <referenceBlock name="head.components">
+            <block name="edipost_js_vars" class="Edipost\Shipment\Block\Adminhtml\Order\View\Shipment" template="Edipost_Shipment::Order/js/vars.phtml"/>
+        </referenceBlock>
         <referenceBlock name="order_additional_info">
-            <block class="Edipost\Shipment\Block\Adminhtml\Order\View\Shipment" name="sales_order_custom_view" template="Order/View/edipost.phtml" />
+            <block class="Edipost\Shipment\Block\Adminhtml\Order\View\Shipment" name="sales_order_custom_view" template="Edipost_Shipment::Order/View/edipost.phtml" />
         </referenceBlock>
     </body>
 </page>
