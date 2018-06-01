@@ -55,10 +55,8 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
 
         $company_name = 'no company';
         if($shippingAddressArray['company']){
-            $shippingAddressArray['company'];
+            $company_name = $shippingAddressArray['company'];
         }
-
-
 
         $consignee = $builder
             ->setCompanyName( $company_name )
@@ -78,7 +76,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
             ->build();
         $pdf = '';
 
-//        try {
+        try {
             $newConsignee = $this->_api->createConsignee( $consignee );
             $consigneeId =  $newConsignee->ID;
 
@@ -94,22 +92,35 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
                 ->setContentReference( $reference )
                 ->setInternalReference( '' );
 
-            $consignment->addItem( new Item( 1, 0, 0, 0 ) );
-//
+            foreach ($order->getAllItems() as $product) {
+                $weight = 1;
+                $length = 0;
+                $width = 0;
+                $height = 0;
+
+                if($product->getWeight()){
+                    $weight = $product->getWeight();
+                }
+
+                $consignment->addItem( new Item( $weight, $length, $width, $height ) );
+            }
+
             $newConsignment = $this->_api->createConsignment( $consignment->build() );
-//            $pdf = $this->_api->printConsignment( $newConsignment->id );
-
-//        } catch (WebException $exception){
-//            $error = $exception->getMessage();
-//        }
+            $pdf = $this->_api->printConsignment( $newConsignment->id );
 
 
+        } catch (WebException $exception){
+            $error = $exception->getMessage();
+        }
+        catch(Exception $exception)
+        {
+            $error = $exception->getMessage();
+        }
 
 
         return $result->setData([
             'error' => $error,
-            'pdf' => $pdf,
-            'id' => $newConsignment->id,
+            'pdf' => base64_encode($pdf),
         ]);
     }
 }

@@ -123,8 +123,8 @@ class Shipment extends Template
         }
 
         try {
-//            $products =  $this->_api->getAvailableProducts( (string)$shippingData['fromZipCode'], $shippingData['fromCountryCode'], $shippingData['toCountryCode'], $items );
-            $products =  $this->_api->getAvailableProducts( (string)$shippingData['fromZipCode'], $shippingData['fromCountryCode'], (string)'1337', 'NO', $items ); // test data
+            $products =  $this->_api->getAvailableProducts( $shippingData['fromZipCode'], $shippingData['fromCountryCode'], $shippingData['toZipCode'], $shippingData['toCountryCode'], $items );
+//            $products =  $this->_api->getAvailableProducts( (string)$shippingData['fromZipCode'], $shippingData['fromCountryCode'], (string)'1337', 'NO', $items ); // test data
             foreach ($products as $product){
                 $options[] = [
                     'id' => $product->getId(),
