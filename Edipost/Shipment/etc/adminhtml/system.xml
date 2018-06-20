@@ -11,25 +11,36 @@
                     <label>Module Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <config_path>edipost/settings/enable</config_path>
+                    <comment>some text.</comment>
                 </field>
                 <field id="api_endpoint" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Endpoint</label>
                     <validate>required-entry validate-url</validate>
                     <config_path>edipost/settings/api_endpoint</config_path>
+                    <comment>some text.</comment>
                 </field>
-                <field id="api_token" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="web_app_url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Webapp Url</label>
+                    <validate>required-entry validate-url</validate>
+                    <config_path>edipost/settings/web_app_url</config_path>
+                    <comment>some text.</comment>
+                </field>
+                <field id="api_token" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Token</label>
                     <config_path>edipost/settings/api_token</config_path>
+                    <comment>some text.</comment>
                 </field>
-                <field id="username" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="username" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Username</label>
                     <validate>required-entry validate-email</validate>
                     <config_path>edipost/settings/username</config_path>
+                    <comment>some text.</comment>
                 </field>
-                <field id="password" translate="label" type="password" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="password" translate="label" type="password" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Password</label>
                     <validate>required-entry</validate>
                     <config_path>edipost/settings/password</config_path>
+                    <comment>some text.</comment>
                 </field>
             </group>
             <group id="printers" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -37,17 +48,19 @@
                 <field id="print_engine" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Print Engine Status</label>
                     <config_path>edipost/printers/print_engine</config_path>
+                    <comment>some text.</comment>
                 </field>
                 <field id="printer" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Label Printer</label>
                     <source_model>Edipost\Shipment\Model\Config\Source\Printers</source_model>
                     <config_path>edipost/printers/printer</config_path>
+                    <comment>some text.</comment>
                 </field>
                 <field id="printer_rfid" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Label Printer(RFID)</label>
                     <source_model>Edipost\Shipment\Model\Config\Source\Printers</source_model>
                     <config_path>edipost/printers/printer_rfid</config_path>
-                    <!--<comment>some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text.</comment>-->
+                    <comment>some text.</comment>
                 </field>
                 <comment>
                     <![CDATA[some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text.]]>

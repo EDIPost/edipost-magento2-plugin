@@ -33,6 +33,8 @@ class ConfigData extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /*
+     * if module enable
+     *
      * @return bool
      */
     public function isEnabled()
@@ -40,6 +42,31 @@ class ConfigData extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->scopeConfig->isSetFlag(
             $this->getFullXmlPath('settings', 'enable'),
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        );
+    }
+
+    /*
+     * if config data is empty
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return !($this->scopeConfig->getValue(
+                $this->getFullXmlPath('settings', 'api_endpoint'),
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT) &&
+            $this->scopeConfig->getValue(
+                $this->getFullXmlPath('settings', 'username'),
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT) &&
+            $this->scopeConfig->getValue(
+                $this->getFullXmlPath('settings', 'password'),
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT) &&
+            $this->scopeConfig->getValue(
+                $this->getFullXmlPath('settings', 'web_app_url'),
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT) &&
+            $this->scopeConfig->getValue(
+                $this->getFullXmlPath('settings', 'api_token'),
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
         );
     }
 
@@ -61,7 +88,11 @@ class ConfigData extends \Magento\Framework\App\Helper\AbstractHelper
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             ),
             'password' => $this->scopeConfig->getValue(
-                $this->getFullXmlPath('settings', 'username'),
+                $this->getFullXmlPath('settings', 'password'),
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            ),
+            'web_app_url' => $this->scopeConfig->getValue(
+                $this->getFullXmlPath('settings', 'web_app_url'),
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             )
         ];
@@ -93,6 +124,9 @@ class ConfigData extends \Magento\Framework\App\Helper\AbstractHelper
         return $xml_base_path . $section . '/' . $attr;
     }
 
+   /*
+   * @return array
+   */
     public function getShippingData(){
         return [
             'fromCountryCode' => $this->scopeConfig->getValue(

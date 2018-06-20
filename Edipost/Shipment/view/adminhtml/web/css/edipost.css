@@ -1,0 +1,5 @@
+@media (min-width: 768px) {
+    .edipost-wrapper {
+        width: calc( (100%) * 0.5 - 30px );
+    }
+}
