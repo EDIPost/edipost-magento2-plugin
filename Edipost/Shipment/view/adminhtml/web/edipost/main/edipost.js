@@ -52,9 +52,6 @@ require([
             }
             ,
             success: function (data) {
-                // data = base64ToArrayBuffer(data);
-                // console.log(data);
-                // console.log(Base64.decode(data.pdf));
                 if (!(data.error)) {
                         var blob=new Blob([base64ToArrayBuffer(data.pdf)]);
                         var link=document.createElement('a');
@@ -62,18 +59,8 @@ require([
                         link.download="etiket.pdf";
                         link.click();
                 } else {
-                    // alert(data.error);
                     console.log(JSON.stringify(data));
                 }
-                // var binaryData = [];
-                // binaryData.push(data);
-                // var URL = window.URL || window.webkitURL;
-                // var file = URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}));
-                // var a = document.createElement("a");
-                // a.href = file;
-                // a.download = "etiket.pdf";
-                // document.body.appendChild(a);
-                // a.click();
             },
             error: function (data) {
                 console.log(JSON.stringify(data));

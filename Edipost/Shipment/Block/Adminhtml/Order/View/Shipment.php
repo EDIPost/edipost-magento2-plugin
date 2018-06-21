@@ -1,9 +1,12 @@
 <?php
+
 namespace Edipost\Shipment\Block\Adminhtml\Order\View;
 
 use \Magento\Framework\View\Element\Template;
 use Edipost\Shipment\Helper\View as helperView;
-require_once( helperView::getDirectory() . DIRECTORY_SEPARATOR . 'Lib' . DIRECTORY_SEPARATOR . 'php-rest-client' . DIRECTORY_SEPARATOR . 'EdipostService.php' );
+
+require_once(helperView::getDirectory() . DIRECTORY_SEPARATOR . 'Lib' . DIRECTORY_SEPARATOR . 'php-rest-client' . DIRECTORY_SEPARATOR . 'EdipostService.php');
+
 use EdipostService\EdipostService;
 use EdipostService\ServiceConnection\WebException;
 
@@ -33,7 +36,6 @@ class Shipment extends Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Edipost\Shipment\Helper\ConfigData $configData
-     * @param \Magento\Store\Model\Information $storeInfo
      * @param array $data
      */
     public function __construct(
@@ -41,12 +43,14 @@ class Shipment extends Template
         \Magento\Framework\App\Request\Http $request,
         \Edipost\Shipment\Helper\ConfigData $configData,
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($context, $data);
         $this->_request = $request;
         $this->configHelper = $configData;
+
         $apiData = $this->configHelper->apiData();
-        $this->_api = new EdipostService( $apiData['api_token'], $apiData['api_endpoint'] );
+        $this->_api = new EdipostService($apiData['api_token'], $apiData['api_endpoint']);
         $this->_order_id = $this->getOrderId();
         $this->_order = helperView::getOrderById($this->_order_id);
     }
@@ -58,7 +62,7 @@ class Shipment extends Template
      */
     private function getOrderId()
     {
-        return (int) $this->getRequest()->getParam('order_id');
+        return (int)$this->getRequest()->getParam('order_id');
     }
 
     /**
@@ -69,9 +73,9 @@ class Shipment extends Template
     public function getAjaxUrl()
     {
         return [
-            'open'=> $this->getUrl('edipost/ajax/openedipost/'),
-            'create'=> $this->getUrl('edipost/ajax/createshipment/'),
-            ];
+            'open' => $this->getUrl('edipost/ajax/openedipost/'),
+            'create' => $this->getUrl('edipost/ajax/createshipment/'),
+        ];
     }
 
     /**
@@ -100,38 +104,50 @@ class Shipment extends Template
     }
 
     /**
+     * Check if no url, username or password is not given in config section
+     *
+     * @return boolean
+     */
+    public function isConfigEmpty()
+    {
+        return $this->configHelper->isEmpty();
+    }
+
+    /**
      * return shipping methods from Edipost Api.
      *
      * @return object
      */
-    public function getShipingMethods(){
+    public function getShipingMethods()
+    {
         $items = [];
         $error = '';
         $shippingData = $this->getShipingAdress();
         $options = [];
 
         foreach ($this->_order->getAllItems() as $product) {
-            if(!($weight = $product->getWeight())){
+            if (!($weight = $product->getWeight())) {
                 $weight = 1;
             }
             $items[] = [
                 'weight' => $weight,
                 'length' => '0',
-                'width'  => '0',
+                'width' => '0',
                 'height' => '100'
             ];
         }
 
         try {
-            $products =  $this->_api->getAvailableProducts( $shippingData['fromZipCode'], $shippingData['fromCountryCode'], $shippingData['toZipCode'], $shippingData['toCountryCode'], $items );
+            $products = $this->_api->getAvailableProducts($shippingData['fromZipCode'], $shippingData['fromCountryCode'], $shippingData['toZipCode'], $shippingData['toCountryCode'], $items);
 //            $products =  $this->_api->getAvailableProducts( (string)$shippingData['fromZipCode'], $shippingData['fromCountryCode'], (string)'1337', 'NO', $items ); // test data
-            foreach ($products as $product){
+            foreach ($products as $product) {
                 $options[] = [
                     'id' => $product->getId(),
-                    'name' => $product->getName()
+                    'name' => $product->getName(),
+                    'status' => $product->getStatus()
                 ];
             }
-        } catch (WebException $exception){
+        } catch (WebException $exception) {
             $error = $exception->getMessage();
         }
 
@@ -147,7 +163,8 @@ class Shipment extends Template
      * @return array
      */
 
-    private function getShipingAdress(){
+    private function getShipingAdress()
+    {
 
         $shippingAddressArray = $this->_order->getShippingAddress()->getData();
 

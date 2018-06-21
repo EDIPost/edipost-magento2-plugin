@@ -41,7 +41,7 @@ class OpenEdipost extends \Magento\Backend\App\AbstractAction {
         }
         $result = $this->resultJsonFactory->create();
         $error = '';
-        $url = 'https://dev.pbshipment.com/login?Username=%s&Password=%s#id=%s';
+        $url = '%s/login?Username=%s&Password=%s#id=%s';
 
         $order_id = $this->getRequest()->getParam('order_id', 0);
 
@@ -51,9 +51,9 @@ class OpenEdipost extends \Magento\Backend\App\AbstractAction {
 
         $builder = new ConsigneeBuilder();
 
-        $company_name = 'no company';
+        $company_name = $shippingAddressArray['firstname'].' '. $shippingAddressArray['lastname'];
         if($shippingAddressArray['company']){
-            $shippingAddressArray['company'];
+            $company_name = $shippingAddressArray['company'];
         }
 
         $consignee = $builder
@@ -79,7 +79,7 @@ class OpenEdipost extends \Magento\Backend\App\AbstractAction {
         } catch (WebException $exception){
             $error = $exception->getMessage();
         }
-        $url = sprintf($url, $this->_apiData['username'], $this->_apiData['password'], $consigneeId);
+        $url = sprintf($url, $this->_apiData['web_app_url'],  $this->_apiData['username'], $this->_apiData['password'], $consigneeId);
         return $result->setData([
             'error' => $error,
             'url' => $url,

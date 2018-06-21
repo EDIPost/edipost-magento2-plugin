@@ -1,12 +1,9 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <!--<link src="Edipost_Shipment::js/bootstrap/edipost-index.js"/>-->
+        <css src="Edipost_Shipment::css/edipost.css"/>
     </head>
     <body>
-        <!--<referenceContainer name="require.js" before="js">-->
-            <!--<block name="edipost_js_vars" class="Edipost\Shipment\Block\Adminhtml\Order\View\Shipment" after="require.js" template="Edipost_Shipment::Order/js/vars.phtml"/>-->
-        <!--</referenceContainer>-->
         <referenceBlock name="head.components">
             <block name="edipost_js_vars" class="Edipost\Shipment\Block\Adminhtml\Order\View\Shipment" template="Edipost_Shipment::Order/js/vars.phtml"/>
         </referenceBlock>

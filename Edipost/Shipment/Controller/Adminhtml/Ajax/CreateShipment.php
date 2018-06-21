@@ -10,25 +10,29 @@ use EdipostService\EdipostService;
 
 
 class CreateShipment extends \Magento\Backend\App\AbstractAction {
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Edipost\Shipment\Helper\ConfigData $configData
-     */
 
     protected $configHelper;
 
     protected $_api;
     protected $_apiData;
 
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Edipost\Shipment\Helper\ConfigData $configData
+     * @param \Edipost\Shipment\Helper\ShipmentWorker $shipmentWorker
+     */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Edipost\Shipment\Helper\ConfigData $configData
+        \Edipost\Shipment\Helper\ConfigData $configData,
+        \Edipost\Shipment\Helper\ShipmentWorker $shipmentWorker
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->configHelper = $configData;
+        $this->shipmentWorker = $shipmentWorker;
         $this->_apiData = $this->configHelper->apiData();
         $this->_api = new EdipostService( $this->_apiData ['api_token'], $this->_apiData ['api_endpoint'] );
     }
@@ -53,7 +57,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
 
         $builder = new ConsigneeBuilder();
 
-        $company_name = 'no company';
+        $company_name = $shippingAddressArray['firstname'].' '. $shippingAddressArray['lastname'];
         if($shippingAddressArray['company']){
             $company_name = $shippingAddressArray['company'];
         }
@@ -106,6 +110,12 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
             }
 
             $newConsignment = $this->_api->createConsignment( $consignment->build() );
+
+            $this->shipmentWorker->deleteShipments($order);
+            if($shipment = $this->shipmentWorker->createShipment($order)){
+                $this->shipmentWorker->createTrackData($shipment, $newConsignment->id, $consignor->getCompanyName() );
+            }
+
             $pdf = $this->_api->printConsignment( $newConsignment->id );
 
 

@@ -1,19 +1,20 @@
 <?php
-    if(!$block->isModuleEnable()){
-        return ;
-    }
+if (!$block->isModuleEnable()) {
+    return;
+}
 ?>
-<section class="admin__page-section">
+<section class="admin__page-section edipost-wrapper">
     <?php $shipingMethods = $block->getShipingMethods(); ?>
 
-    <?php if($sError = $shipingMethods->error){ ?>
+    <?php if ($sError = $shipingMethods->error) { ?>
         <div class="admin__page-section-title error">
-            <span class="title"><?=  $sError ?></span>
+            <span class="title"><?= $sError ?></span>
         </div>
     <?php } ?>
 
     <div class="admin__page-section-title">
-        <span class="title"><?= /* @escapeNotVerified */ __('Edipost integration') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */
+            __('Edipost integration') ?></span>
     </div>
 
     <div class="admin__page-section-content">
@@ -22,36 +23,47 @@
                 <div class="edipost-block" id="edipost_form">
 
                     <div class="admin__field">
-                        <label for="edipost_ship_method" class="admin__field-label"><?= /* @escapeNotVerified */ __('Chose shipping method') ?></label>
+                        <label for="edipost_ship_method" class="admin__field-label"><?= /* @escapeNotVerified */
+                            __('Chose shipping method') ?></label>
                         <div class="admin__field-control">
                             <select name="edipost[ship_method]" id="edipost_ship_method" class="admin__control-select">
-                                <?php foreach ($shipingMethods->options as $option){ ?>
-                                <option value="<?= $option['id'] ?>"><?= $option['name'] ?></option>
+                                <?php foreach ($shipingMethods->options as $option) { ?>
+                                    <option <?= ($option['status'] == 'Available') ? '' : 'disabled title="' . $option['status'] . '"' ?>
+                                            value="<?= $option['id'] ?>"><?= $option['name'] ?></option>
                                 <?php } ?>
                             </select>
                         </div>
                     </div>
 
                     <div class="admin__field">
-                        <label for="edipost_reference" class="admin__field-label"><?= /* @escapeNotVerified */ __('Reference text(optional)') ?></label>
+                        <label for="edipost_reference" class="admin__field-label"><?= /* @escapeNotVerified */
+                            __('Reference text(optional)') ?></label>
                         <div class="admin__field-control">
-                            <textarea name="edipost[reference]" rows="3" cols="5" id="edipost_reference" class="admin__control-textarea"></textarea>
+                            <textarea name="edipost[reference]" rows="3" cols="5" id="edipost_reference"
+                                      class="admin__control-textarea"></textarea>
                         </div>
                     </div>
 
                     <div class="admin__field">
 
                         <div class="order-edipost-shipments-actions">
-                            <button id="edipost-create" title="Create shipment" type="button" class="action-default scalable action-save action-secondary" data-ui-id="widget-button-0">
-                                <span><?= /* @escapeNotVerified */ __('Create shipment') ?></span>
+                            <button id="edipost-create" title="Create shipment" type="button"
+                                    class="action-default scalable action-save action-secondary"
+                                    data-ui-id="widget-button-0">
+                                <span><?= /* @escapeNotVerified */
+                                    __('Create shipment') ?></span>
                             </button>
-                            <button id="edipost-open"  title="Open in Edipost" type="button" class="action-default scalable action-save action-secondary" data-ui-id="widget-button-1">
-                                <span><?= /* @escapeNotVerified */ __('Open in Edipost') ?></span>
+                            <button <?= $block->isConfigEmpty() ? 'disabled' : '' ?> id="edipost-open"
+                                                                                     title="Open in Edipost"
+                                                                                     type="button"
+                                                                                     class="action-default scalable action-save action-secondary"
+                                                                                     data-ui-id="widget-button-1">
+                                <span><?= /* @escapeNotVerified */
+                                    __('Open in Edipost') ?></span>
                             </button>
                         </div>
                     </div>
                 </div>
-
 
             </div>
         </div>
