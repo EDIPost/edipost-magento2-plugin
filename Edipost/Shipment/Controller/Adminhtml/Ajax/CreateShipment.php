@@ -49,6 +49,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
 
         $order_id = $this->getRequest()->getParam('order_id', 0);
         $product_id = $this->getRequest()->getParam('product_id', 0);
+        $e_alert = $this->getRequest()->getParam('e_alert', 0);
         $reference = $this->getRequest()->getParam('reference', '');
 
         $order = helperView::getOrderById($order_id);
@@ -109,12 +110,92 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
                 $consignment->addItem( new Item( $weight, $length, $width, $height ) );
             }
 
+            if($e_alert && in_array(intval($product_id), [8, 457, 16])){
+                // Add SMS warning
+                if ($shippingAddressArray['telephone']) {
+                    $consignment->addService(5, array('EMSG_SMS_NUMBER' => $shippingAddressArray['telephone']));
+                }
+
+                // Add e-mail warning
+                if ($shippingAddressArray['email']) {
+                    $consignment->addService(6, array('EMSG_EMAIL' => $shippingAddressArray['email']));
+                }
+            }
+
             $newConsignment = $this->_api->createConsignment( $consignment->build() );
 
+
+
+
             $this->shipmentWorker->deleteShipments($order);
-            if($shipment = $this->shipmentWorker->createShipment($order)){
-                $this->shipmentWorker->createTrackData($shipment, $newConsignment->id, $consignor->getCompanyName() );
+
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+
+            $package_weight=0;
+
+            $convertOrder = $objectManager->create('\Magento\Sales\Model\Convert\Order');
+            $shipment = $convertOrder->toShipment($order);
+
+            $package = array();
+
+            $packaging = array(
+                'items' => array()
+            );
+
+            $subtotal = 0;
+            foreach ($order->getAllItems() AS $orderItem) {
+                if (! $orderItem->getQtyOrdered() || $orderItem->getIsVirtual()) {
+                    continue;
+                }
+                $qtyShipped = $orderItem->getQtyOrdered();
+                $shipmentItem = $convertOrder->itemToShipmentItem($orderItem)->setQty($qtyShipped);
+                $packaging['items'][$shipmentItem->getOrderItemId()] = array(
+                    'qty' => $shipmentItem->getQty(),
+                    'custom_value' => $shipmentItem->getPrice(),
+                    'price' => $shipmentItem->getPrice(),
+                    'name' => $shipmentItem->getName(),
+                    'weight' => $shipmentItem->getWeight(),
+                    'product_id' => $shipmentItem->getProductId(),
+                    'order_item_id' => $shipmentItem->getOrderItemId()
+                );
+
+                $package_weight += $shipmentItem->getWeight();
+
+                $subtotal += $shipmentItem->getRowTotal();
+                $shipment->addItem($shipmentItem);
             }
+
+            if(empty($packaging['items']))
+            {
+                $error = __('No items to ship');
+            }
+
+            $packaging['params'] = array(
+                'container' => '',
+                'weight' => $package_weight,
+                'custom_value' => $subtotal,
+                'weight_units' => 'KILOGRAM',
+                'dimension_units' => 'CENTIMETER',
+                'content_type' => '',
+                'content_type_other' => ''
+            );
+            $package[] = $packaging;
+
+            $shipment->setPackages($package);
+            $shipment->register();
+            $shipment->getOrder()->setIsInProcess(true);
+            try {
+                $shipment->save();
+                $shipment->getOrder()->save();
+                $notify = $objectManager->create('Magento\Shipping\Model\ShipmentNotifier');
+                $notify->notify($shipment);
+                $shipment->save();
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+            }
+
+            $this->shipmentWorker->createTrackData($shipment, $newConsignment->shipmentNumber );
 
             $pdf = $this->_api->printConsignment( $newConsignment->id );
 

@@ -103,11 +103,11 @@ class ConfigData extends \Magento\Framework\App\Helper\AbstractHelper
     */
     public function printersData(){
         return [
-            'api_endpoint' => $this->scopeConfig->getValue(
+            'printer' => $this->scopeConfig->getValue(
                 $this->getFullXmlPath('printers', 'printer'),
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             ),
-            'api_token' => $this->scopeConfig->getValue(
+            'printer_rfid' => $this->scopeConfig->getValue(
                 $this->getFullXmlPath('printers', 'printer_rfid'),
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             )

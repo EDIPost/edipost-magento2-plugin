@@ -45,11 +45,6 @@
             </group>
             <group id="printers" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Printer Settings</label>
-                <field id="print_engine" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Print Engine Status</label>
-                    <config_path>edipost/printers/print_engine</config_path>
-                    <comment>some text.</comment>
-                </field>
                 <field id="printer" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Label Printer</label>
                     <source_model>Edipost\Shipment\Model\Config\Source\Printers</source_model>

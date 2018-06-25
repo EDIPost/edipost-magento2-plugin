@@ -17,6 +17,10 @@ if (!$block->isModuleEnable()) {
             __('Edipost integration') ?></span>
     </div>
 
+    <div class="admin__page-section-title" id="error-block" style="display: none">
+        <div id="debug" class =  style="width: 650px; height: 300px; border: 1px solid black; overflow: scroll;"></div>
+    </div>
+
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-edipost-shipments">
             <div id="order_edipost_block" class="edit-shipments">
@@ -41,6 +45,15 @@ if (!$block->isModuleEnable()) {
                         <div class="admin__field-control">
                             <textarea name="edipost[reference]" rows="3" cols="5" id="edipost_reference"
                                       class="admin__control-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="admin__field">
+                        <label for="edipost_e_alert" class="admin__field-label"><?= /* @escapeNotVerified */
+                            __('Electronic alert on SMS/Email') ?></label>
+                        <div class="admin__field-control">
+                            <checkbox name="edipost[e_alert]"  id="edipost_e_alert"
+                                      class="admin__control-checkbox"></checkbox>
                         </div>
                     </div>
 

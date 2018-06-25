@@ -47,7 +47,4 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         return $objectManager->create('Magento\Sales\Model\Order')->load($orderId);
     }
 
-//    static function getOrderById($orderId) {
-//
-//    }
 }
