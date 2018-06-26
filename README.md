@@ -16,6 +16,8 @@ Magento 2 plugin for integration with Edipost. Make it possible to print shippin
 
 ## Development setup
 
+### Initial setup
+
 1. Clone repo
 2. Copy <git_repo_dir>/Edipost to <magento2_dir>/app/code.  
    <magento2_dir>/app should look like this:
@@ -30,6 +32,12 @@ Magento 2 plugin for integration with Edipost. Make it possible to print shippin
 3. Run `bin/magento module:enable Edipost_Shipment` to enable module
 4. Run `bin/magento module:status` to check if the module is enabled
 5. Run `bin/magento setup:upgrade` to update database schema, clear compiled code and cache
+
+### Update
+1. Pull latest changes from git
+2. `rm -rf <magento2_dir>/app/code/Edipost`
+3. `cp -r <git_repo_dir>/Edipost <magento2_dir>/app/code/`
+4. Clear cache by running `sudo bin/magento cache:flush`
 
 ### Config
 Configuration data is stored in database table `core_config_data`.
