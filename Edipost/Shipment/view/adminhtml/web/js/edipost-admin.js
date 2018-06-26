@@ -8,19 +8,21 @@ require([
      * Check if print engine is active
      */
     function checkPrintEngine() {
+        var return_obj = {
+            error: 1,
+            text: "<span style='color: red;'>Not Active</span>"
+        };
+
         lp.getVersion( function(data) {
-            return{
+            return_obj = {
                 error: 0,
                 text: "<span style='color: green;'>Active</span>"
-            }
+            };
 
         }, function(data) {
 
         });
-        return{
-            error: 1,
-            text: "<span style='color: red;'>Not Active</span>"
-        }
+        return return_obj;
     }
 
     /**
