@@ -1,14 +1,14 @@
 require([
     "jquery",
     "Edipost_Shipment/js/localprint/localprint"
-], function($){
+], function ($) {
     "use strict";
     var lp = new LocalPrint();
 
-    function debug( msg ) {
+    function debug(msg) {
         $('.edipost-wrapper #error-block').show();
         $('.edipost-wrapper #error-block #debug').append(msg + "<br />");
-        $('.edipost-wrapper #error-block #debug').scrollTop( $('#debug')[0].scrollHeight );
+        $('.edipost-wrapper #error-block #debug').scrollTop($('#debug')[0].scrollHeight);
     }
 
     /**
@@ -16,9 +16,9 @@ require([
      */
     function startPrintRaw(zplData, printerName) {
 
-        lp.printRaw( zplData, printerName, function(data) {
+        lp.printRaw(zplData, printerName, function (data) {
             debug('Status: ' + data.Status + ', ErrorCode: ' + data.ErrorCode + ', ErrorText: ' + data.ErrorText);
-        }, function(data) {
+        }, function (data) {
             debug('Error when printing RAW');
         });
     }
@@ -27,24 +27,25 @@ require([
      * Check if print engine is active
      */
     function checkPrintEngine() {
-        lp.getVersion( function(data) {
-            return 0;
+        var return_var = 1;
+        lp.getVersion(function (data) {
+            return_var = 0;
 
-        }, function(data) {
+        }, function (data) {
 
         });
-        return 1;
+        return return_var;
     }
 
-    function base64ToArrayBuffer( base64 ) {
-        var raw = window.atob( base64 );
+    function base64ToArrayBuffer(base64) {
+        var raw = window.atob(base64);
         var rawLength = raw.length;
-        var array = new Uint8Array( new ArrayBuffer(rawLength) );
+        var array = new Uint8Array(new ArrayBuffer(rawLength));
 
-        for( var i = 0; i < rawLength; i++ ) {
-            array[ i ] = raw.charCodeAt( i );
+        for (var i = 0; i < rawLength; i++) {
+            array[i] = raw.charCodeAt(i);
         }
-        return( array.buffer );
+        return ( array.buffer );
     }
 
     $('#edipost-open').on('click', function (e) {
@@ -78,8 +79,7 @@ require([
             e_alert = 1;
         }
 
-
-            $.ajax({
+        $.ajax({
             type: "POST",
             url: EDIPOST_CREATE_SHIPMENT_AJAX_URL,
 
@@ -93,17 +93,16 @@ require([
             ,
             success: function (data) {
                 if (!(data.error)) {
-                        var blob=new Blob([base64ToArrayBuffer(data.pdf)]);
-                        var link=document.createElement('a');
-                        link.href=window.URL.createObjectURL(blob);
-                        link.download="etiket.pdf";
+                    var blob = new Blob([base64ToArrayBuffer(data.pdf)]);
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "etiket.pdf";
 
-                        if (!checkPrintEngine()){ // is active
-                            startPrintRaw(blob, EDIPOST_PRINTER);
-                        } else{
-                            console.log('click');
-                            link.click();
-                        }
+                    if (!checkPrintEngine()) { // is active
+                        startPrintRaw(blob, EDIPOST_PRINTER);
+                    } else {
+                        link.click();
+                    }
 
                 } else {
                     console.log(JSON.stringify(data));
