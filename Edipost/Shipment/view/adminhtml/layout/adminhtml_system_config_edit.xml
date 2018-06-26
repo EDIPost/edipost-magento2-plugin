@@ -2,7 +2,9 @@
 
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <link src="Edipost_Shipment::js/bootstrap/edipost-print.js"/>
-    </head>
+    <body>
+        <referenceBlock name="head.components">
+            <block name="edipost_config_js_vars" class="Edipost\Shipment\Block\Adminhtml\Config\View\ShipmentConfig" template="Edipost_Shipment::Order/js/adminvars.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

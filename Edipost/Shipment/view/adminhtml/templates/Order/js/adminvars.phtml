@@ -1,0 +1,16 @@
+<?php
+/**
+ *
+ *
+ */
+?>
+<script>
+    var EDIPOST_PRINTER = <?php /* @escapeNotVerified */ echo ($block->getPrinterData())['printer'] ?>,
+        EDIPOST_PRINTER_RFID = <?php /* @escapeNotVerified */ echo ($block->getPrinterData())['printer_rfid'] ?>;
+
+    require([
+//        'Edipost_Shipment/js/localprint/localprint',
+        'Edipost_Shipment/js/edipost-admin'
+    ]);
+
+</script>
