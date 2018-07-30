@@ -92,20 +92,22 @@ require([
             ,
             success: function (data) {
                 if(!(data.error)){
-                    var link = document.createElement('a');
-                    link.href = data.pdf;
+                    var link = document.createElement('a'),
+                        pdf = data.pdf,
+                        pdf_raw = data.pdf_raw;
+                    link.href = pdf;
                     link.download = "etiket.pdf";
 
                     if(data.product_id == 727){
                         lp.getVersion(function (data) {
-                            startPrintRaw(data.pdf_raw, EDIPOST_PRINTER);
+                            startPrintRaw(pdf_raw, EDIPOST_PRINTER);
 
                         }, function (data) {
                             link.click();
                         });
                     } else {
                         lp.getVersion(function (data) {
-                            startPrintPdf(data.pdf, EDIPOST_PRINTER);
+                            startPrintPdf(pdf, EDIPOST_PRINTER);
 
                         }, function (data) {
                             link.click();
@@ -114,7 +116,6 @@ require([
                 } else {
                     console.log(JSON.stringify(data));
                 }
-
             },
             error: function (data) {
                 console.log(JSON.stringify(data));
