@@ -45,6 +45,9 @@ Configuration data is stored in database table `core_config_data`.
 SELECT * FROM `core_config_data` WHERE path like '%edipost%'
 ```
 
+### Folder structure
+Media folder `pub/media/edipost`
+
 ## Meta
 
 Vasil M – Skype: vasil.ysbm
