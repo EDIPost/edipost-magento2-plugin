@@ -24,18 +24,17 @@ require([
     }
 
     /**
-     * Check if print engine is active
+     * Call this function to start PDF print from url
      */
-    function checkPrintEngine() {
-        var return_var = 1;
-        lp.getVersion(function (data) {
-            return_var = 0;
-
-        }, function (data) {
-
+    function startPrintPdf(url, printerName) {
+        lp.printPdf( url, printerName, function(data) {
+            debug('Status: ' + data.Status + ', ErrorCode: ' + data.ErrorCode + ', ErrorText: ' + data.ErrorText);
+        }, function(data) {
+            debug('Error when printing PDF');
         });
-        return return_var;
     }
+
+
 
     function base64ToArrayBuffer(base64) {
         var raw = window.atob(base64);
@@ -92,21 +91,30 @@ require([
             }
             ,
             success: function (data) {
-                if (!(data.error)) {
-                    var blob = new Blob([base64ToArrayBuffer(data.pdf)]);
+                if(!(data.error)){
                     var link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
+                    link.href = data.pdf;
                     link.download = "etiket.pdf";
 
-                    if (!checkPrintEngine()) { // is active
-                        startPrintRaw(blob, EDIPOST_PRINTER);
-                    } else {
-                        link.click();
-                    }
+                    if(data.product_id == 727){
+                        lp.getVersion(function (data) {
+                            startPrintRaw(data.pdf_raw, EDIPOST_PRINTER);
 
+                        }, function (data) {
+                            link.click();
+                        });
+                    } else {
+                        lp.getVersion(function (data) {
+                            startPrintPdf(data.pdf, EDIPOST_PRINTER);
+
+                        }, function (data) {
+                            link.click();
+                        });
+                    }
                 } else {
                     console.log(JSON.stringify(data));
                 }
+
             },
             error: function (data) {
                 console.log(JSON.stringify(data));

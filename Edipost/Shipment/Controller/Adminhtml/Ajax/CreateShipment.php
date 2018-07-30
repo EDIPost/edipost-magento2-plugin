@@ -1,15 +1,19 @@
 <?php
+
 namespace Edipost\Shipment\Controller\Adminhtml\Ajax;
 
 use Edipost\Shipment\Helper\View as helperView;
-require_once( helperView::getDirectory() . DIRECTORY_SEPARATOR . 'Lib' . DIRECTORY_SEPARATOR . 'php-rest-client' . DIRECTORY_SEPARATOR . 'EdipostService.php' );
+
+require_once(helperView::getDirectory() . DIRECTORY_SEPARATOR . 'Lib' . DIRECTORY_SEPARATOR . 'php-rest-client' . DIRECTORY_SEPARATOR . 'EdipostService.php');
+
 use EdipostService\Client\Builder\ConsigneeBuilder;
 use EdipostService\Client\Builder\ConsignmentBuilder;
 use EdipostService\Client\Item;
 use EdipostService\EdipostService;
 
 
-class CreateShipment extends \Magento\Backend\App\AbstractAction {
+class CreateShipment extends \Magento\Backend\App\AbstractAction
+{
 
     protected $configHelper;
 
@@ -22,26 +26,38 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Edipost\Shipment\Helper\ConfigData $configData
      * @param \Edipost\Shipment\Helper\ShipmentWorker $shipmentWorker
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Edipost\Shipment\Helper\ConfigData $configData,
-        \Edipost\Shipment\Helper\ShipmentWorker $shipmentWorker
-    ) {
+        \Edipost\Shipment\Helper\ShipmentWorker $shipmentWorker,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
+    )
+    {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->configHelper = $configData;
         $this->shipmentWorker = $shipmentWorker;
+        $this->filesystem = $filesystem;
+        $this->directoryList = $directoryList;
+        $this->storeManager = $storeManager;
+
         $this->_apiData = $this->configHelper->apiData();
-        $this->_api = new EdipostService( $this->_apiData ['api_token'], $this->_apiData ['api_endpoint'] );
+        $this->_api = new EdipostService($this->_apiData ['api_token'], $this->_apiData ['api_endpoint']);
     }
 
     /**
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function execute() {
-        if(!$this->getRequest()->isAjax()){
+    public function execute()
+    {
+        if (!$this->getRequest()->isAjax()) {
             return false;
         }
         $result = $this->resultJsonFactory->create();
@@ -58,44 +74,45 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
 
         $builder = new ConsigneeBuilder();
 
-        $company_name = $shippingAddressArray['firstname'].' '. $shippingAddressArray['lastname'];
-        if($shippingAddressArray['company']){
+        $company_name = $shippingAddressArray['firstname'] . ' ' . $shippingAddressArray['lastname'];
+        if ($shippingAddressArray['company']) {
             $company_name = $shippingAddressArray['company'];
         }
 
         $consignee = $builder
-            ->setCompanyName( $company_name )
-            ->setCustomerNumber( (string)$order->getCustomerId() )
-            ->setPostAddress( $shippingAddressArray['street'] )
-            ->setPostZip( $shippingAddressArray['postcode'] )
-            ->setPostCity( $shippingAddressArray['city'] )
-            ->setStreetAddress( $shippingAddressArray['street'] )
-            ->setStreetZip( $shippingAddressArray['postcode'] )
-            ->setStreetCity( $shippingAddressArray['city'] )
-            ->setContactName($shippingAddressArray['firstname'].' '. $shippingAddressArray['lastname'] )
-            ->setContactEmail( $shippingAddressArray['email'] )
-            ->setContactPhone( $shippingAddressArray['telephone'] )
-            ->setContactCellPhone( $shippingAddressArray['telephone'] )
-            ->setContactTelefax( $shippingAddressArray['fax'] )
-            ->setCountry( $shippingAddressArray['country_id'] )
+            ->setCompanyName($company_name)
+            ->setCustomerNumber((string)$order->getCustomerId())
+            ->setPostAddress($shippingAddressArray['street'])
+            ->setPostZip($shippingAddressArray['postcode'])
+            ->setPostCity($shippingAddressArray['city'])
+            ->setStreetAddress($shippingAddressArray['street'])
+            ->setStreetZip($shippingAddressArray['postcode'])
+            ->setStreetCity($shippingAddressArray['city'])
+            ->setContactName($shippingAddressArray['firstname'] . ' ' . $shippingAddressArray['lastname'])
+            ->setContactEmail($shippingAddressArray['email'])
+            ->setContactPhone($shippingAddressArray['telephone'])
+            ->setContactCellPhone($shippingAddressArray['telephone'])
+            ->setContactTelefax($shippingAddressArray['fax'])
+            ->setCountry($shippingAddressArray['country_id'])
             ->build();
         $pdf = '';
+        $pdf_raw = '';
 
         try {
-            $newConsignee = $this->_api->createConsignee( $consignee );
-            $consigneeId =  $newConsignee->ID;
+            $newConsignee = $this->_api->createConsignee($consignee);
+            $consigneeId = $newConsignee->ID;
 
             $builder = new ConsignmentBuilder();
 
             $consignor = $this->_api->getDefaultConsignor();
 
             $consignment = $builder
-                ->setConsignorID( $consignor->ID )
-                ->setConsigneeID( $consigneeId )
-                ->setProductID( $product_id )
-                ->setTransportInstructions( '' )
-                ->setContentReference( $reference )
-                ->setInternalReference( '' );
+                ->setConsignorID($consignor->ID)
+                ->setConsigneeID($consigneeId)
+                ->setProductID($product_id)
+                ->setTransportInstructions('')
+                ->setContentReference($reference)
+                ->setInternalReference('');
 
             foreach ($order->getAllItems() as $product) {
                 $weight = 1;
@@ -103,14 +120,14 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
                 $width = 0;
                 $height = 0;
 
-                if($product->getWeight()){
+                if ($product->getWeight()) {
                     $weight = $product->getWeight();
                 }
 
-                $consignment->addItem( new Item( $weight, $length, $width, $height ) );
+                $consignment->addItem(new Item($weight, $length, $width, $height));
             }
 
-            if($e_alert && in_array(intval($product_id), [8, 457, 16])){
+            if ($e_alert && in_array(intval($product_id), [8, 457, 16])) {
                 // Add SMS warning
                 if ($shippingAddressArray['telephone']) {
                     $consignment->addService(5, array('EMSG_SMS_NUMBER' => $shippingAddressArray['telephone']));
@@ -122,9 +139,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
                 }
             }
 
-            $newConsignment = $this->_api->createConsignment( $consignment->build() );
-
-
+            $newConsignment = $this->_api->createConsignment($consignment->build());
 
 
             $this->shipmentWorker->deleteShipments($order);
@@ -132,7 +147,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 
 
-            $package_weight=0;
+            $package_weight = 0;
 
             $convertOrder = $objectManager->create('\Magento\Sales\Model\Convert\Order');
             $shipment = $convertOrder->toShipment($order);
@@ -145,7 +160,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
 
             $subtotal = 0;
             foreach ($order->getAllItems() AS $orderItem) {
-                if (! $orderItem->getQtyOrdered() || $orderItem->getIsVirtual()) {
+                if (!$orderItem->getQtyOrdered() || $orderItem->getIsVirtual()) {
                     continue;
                 }
                 $qtyShipped = $orderItem->getQtyOrdered();
@@ -166,8 +181,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
                 $shipment->addItem($shipmentItem);
             }
 
-            if(empty($packaging['items']))
-            {
+            if (empty($packaging['items'])) {
                 $error = __('No items to ship');
             }
 
@@ -195,23 +209,33 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
                 $error = $e->getMessage();
             }
 
-            $this->shipmentWorker->createTrackData($shipment, $newConsignment->shipmentNumber );
+            $this->shipmentWorker->createTrackData($shipment, $newConsignment->shipmentNumber);
 
-            $pdf = $this->_api->printConsignment( $newConsignment->id );
+            if ($product_id == 727) {
+//                $pdf_raw = base64_encode($this->_api->printConsignmentZpl($newConsignment->id));
+                $pdf_raw = $this->_api->printConsignmentZpl($newConsignment->id);
+            }
+
+            $pdf_content = $this->_api->printConsignment($newConsignment->id);
+
+            $media = $this->filesystem->getDirectoryWrite($this->directoryList::MEDIA);
+            $file__media_path = "edipost" . DIRECTORY_SEPARATOR . $newConsignment->id . "_consignment.pdf";
+
+            $media->writeFile($file__media_path, $pdf_content);
+            $pdf = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $file__media_path;
 
 
-        } catch (WebException $exception){
+        } catch (WebException $exception) {
+            $error = $exception->getMessage();
+        } catch (Exception $exception) {
             $error = $exception->getMessage();
         }
-        catch(Exception $exception)
-        {
-            $error = $exception->getMessage();
-        }
-
 
         return $result->setData([
             'error' => $error,
-            'pdf' => base64_encode($pdf),
+            'product_id' => $product_id,
+            'pdf' => $pdf,
+            'pdf_raw' => $pdf_raw,
         ]);
     }
 }
