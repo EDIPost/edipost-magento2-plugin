@@ -35,6 +35,7 @@ Magento 2 plugin for integration with Edipost. Make it possible to print shippin
 
 ### Set up store
 1. Go to `Stores` --> `Configuration` --> `Sales` --> `Shipping Settings` and edit the address fields under `Origin`
+2. Go to `Stores` --> `Configuration` --> `Sales` --> `Edipost Integration` and edit settings
 
 ### Update plugin
 1. Pull latest changes from git
@@ -46,6 +47,11 @@ Magento 2 plugin for integration with Edipost. Make it possible to print shippin
 Configuration data is stored in database table `core_config_data`.
 ```
 SELECT * FROM `core_config_data` WHERE path like '%edipost%'
+```
+
+Sender address is stored in database table `core_config_data`.
+```
+SELECT * FROM `core_config_data` where path like 'shipping/origin/%'
 ```
 
 ### Folder structure
