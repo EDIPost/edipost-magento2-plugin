@@ -47,11 +47,13 @@ if (!$block->isModuleEnable()) {
                     </div>
 
                     <div class="admin__field">
-                        <label for="edipost_e_alert" class="admin__field-label"><?= /* @escapeNotVerified */
-                            __('Electronic alert on SMS/Email') ?></label>
-                        <div class="admin__field-control">
-                            <checkbox name="edipost[e_alert]"  id="edipost_e_alert"
-                                      class="admin__control-checkbox"></checkbox>
+                        <div class="edipost-e-allert-options">
+                            <div class="admin__field admin__field-option">
+                                <input type="checkbox" name="edipost[e_alert]"  id="edipost_e_alert"
+                                       class="admin__control-checkbox">
+                                <label for="edipost_e_alert" class="admin__field-label"><?= /* @escapeNotVerified */
+                                    __('Electronic alert on SMS/Email') ?></label>
+                            </div>
                         </div>
                     </div>
 

@@ -142,7 +142,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
             $newConsignment = $this->_api->createConsignment($consignment->build());
 
 
-            $this->shipmentWorker->deleteShipments($order);
+            //$this->shipmentWorker->deleteShipments($order);
 
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 
@@ -209,7 +209,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
                 $error = $e->getMessage();
             }
 
-            $this->shipmentWorker->createTrackData($shipment, $newConsignment->shipmentNumber);
+            $this->shipmentWorker->createTrackData($shipment, $newConsignment->shipmentNumber, 'custom', 'edipost');
 
             if ($product_id == 727) {
 //                $pdf_raw = base64_encode($this->_api->printConsignmentZpl($newConsignment->id));

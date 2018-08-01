@@ -17,9 +17,9 @@ require([
     function startPrintRaw(zplData, printerName) {
 
         lp.printRaw(zplData, printerName, function (data) {
-            debug('Status: ' + data.Status + ', ErrorCode: ' + data.ErrorCode + ', ErrorText: ' + data.ErrorText);
+            debug(data.Status + ': ' + data.ErrorText);
         }, function (data) {
-            debug('Error when printing RAW');
+            debug('Error when printing RAW: ' + data.ErrorText);
         });
     }
 
@@ -28,13 +28,11 @@ require([
      */
     function startPrintPdf(url, printerName) {
         lp.printPdf( url, printerName, function(data) {
-            debug('Status: ' + data.Status + ', ErrorCode: ' + data.ErrorCode + ', ErrorText: ' + data.ErrorText);
+            debug(data.Status + ': ' + data.ErrorText);
         }, function(data) {
-            debug('Error when printing PDF');
+            debug('Error when printing PDF: ' + data.ErrorText);
         });
     }
-
-
 
     function base64ToArrayBuffer(base64) {
         var raw = window.atob(base64);
@@ -49,15 +47,18 @@ require([
 
     $('#edipost-open').on('click', function (e) {
         e.preventDefault();
+        $('#edipost-open').attr("disabled", true);
+        $('body').loader('show');
         $.ajax({
             type: "POST",
             url: EDIPOST_OPEN_EDIPOST_AJAX_URL,
             data: {
                 order_id: EDIPOST_ORDER_ID,
                 form_key: window.FORM_KEY
-            }
-            ,
+            },
             success: function (data) {
+                $('#edipost-open').attr("disabled", false);
+                $('body').loader('hide');
                 if (!(data.error)) {
                     window.open(data.url, '_blank');
                 } else {
@@ -65,6 +66,8 @@ require([
                 }
             },
             error: function (data) {
+                $('#edipost-open').attr("disabled", false);
+                $('body').loader('hide');
                 console.log(JSON.stringify(data));
             }
         });
@@ -77,7 +80,8 @@ require([
         if ($('#edipost_e_alert').is(':checked')) {
             e_alert = 1;
         }
-
+        $('#edipost-create').attr("disabled", true);
+        $('body').loader('show');
         $.ajax({
             type: "POST",
             url: EDIPOST_CREATE_SHIPMENT_AJAX_URL,
@@ -88,9 +92,10 @@ require([
                 reference: $('#edipost_reference').val(),
                 e_alert: e_alert,
                 form_key: window.FORM_KEY
-            }
-            ,
+            },
             success: function (data) {
+                $('#edipost-create').attr("disabled", false);
+                $('body').loader('hide');
                 if(!(data.error)){
                     var link = document.createElement('a'),
                         pdf = data.pdf,
@@ -118,6 +123,8 @@ require([
                 }
             },
             error: function (data) {
+                $('#edipost-create').attr("disabled", false);
+                $('body').loader('hide');
                 console.log(JSON.stringify(data));
             },
         });
