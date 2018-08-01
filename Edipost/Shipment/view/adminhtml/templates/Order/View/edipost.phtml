@@ -6,19 +6,17 @@ if (!$block->isModuleEnable()) {
 <section class="admin__page-section edipost-wrapper">
     <?php $shipingMethods = $block->getShipingMethods(); ?>
 
-    <?php if ($sError = $shipingMethods->error) { ?>
-        <div class="admin__page-section-title error">
-            <span class="title"><?= $sError ?></span>
-        </div>
-    <?php } ?>
-
     <div class="admin__page-section-title">
         <span class="title"><?= /* @escapeNotVerified */
             __('Edipost integration') ?></span>
     </div>
 
+    <?php if ($sError = $shipingMethods->error) { ?>
+        <label class="mage-error" style="margin-bottom: 20px;"><?= $sError ?></label>
+    <?php } ?>
+
     <div class="admin__page-section-title" id="error-block" style="display: none">
-        <div id="debug" class =  style="width: 650px; height: 300px; border: 1px solid black; overflow: scroll;"></div>
+        <div id="debug" style="width: 650px; height: 300px; border: 1px solid black; overflow: scroll;"></div>
     </div>
 
     <div class="admin__page-section-content">
