@@ -5,10 +5,10 @@ require([
     "use strict";
     var lp = new LocalPrint();
 
-    function debug(msg) {
+    function debug(msg, type) {
+        var html_str = '<div class="messages"><div class="message message-' + type + ' type' + '"><div data-ui-id="messages-message-' + type + '">' + msg + '</div></div></div>';
+        $('.edipost-wrapper #error-block').html(html_str);
         $('.edipost-wrapper #error-block').show();
-        $('.edipost-wrapper #error-block #debug').append(msg + "<br />");
-        $('.edipost-wrapper #error-block #debug').scrollTop($('#debug')[0].scrollHeight);
     }
 
     /**
@@ -17,9 +17,9 @@ require([
     function startPrintRaw(zplData, printerName) {
 
         lp.printRaw(zplData, printerName, function (data) {
-            debug(data.Status + ': ' + data.ErrorText);
+            debug( 'OK', 'success');
         }, function (data) {
-            debug('Error when printing RAW: ' + data.ErrorText);
+            debug('Error when printing RAW: ' + data.ErrorText, 'error');
         });
     }
 
@@ -28,9 +28,9 @@ require([
      */
     function startPrintPdf(url, printerName) {
         lp.printPdf( url, printerName, function(data) {
-            debug(data.Status + ': ' + data.ErrorText);
+            debug( 'OK', 'success');
         }, function(data) {
-            debug('Error when printing PDF: ' + data.ErrorText);
+            debug('Error when printing PDF: ' + data.ErrorText, 'error');
         });
     }
 
@@ -61,14 +61,16 @@ require([
                 $('body').loader('hide');
                 if (!(data.error)) {
                     window.open(data.url, '_blank');
+                    debug( 'OK', 'success');
                 } else {
                     console.log(JSON.stringify(data));
+                    debug( JSON.stringify(data), 'error');
                 }
             },
             error: function (data) {
                 $('#edipost-open').attr("disabled", false);
                 $('body').loader('hide');
-                console.log(JSON.stringify(data));
+                debug( JSON.stringify(data), 'error');
             }
         });
     });
@@ -109,6 +111,7 @@ require([
 
                         }, function (data) {
                             link.click();
+                            debug( 'OK', 'success');
                         });
                     } else {
                         lp.getVersion(function (data) {
@@ -116,6 +119,7 @@ require([
 
                         }, function (data) {
                             link.click();
+                            debug( 'OK', 'success');
                         });
                     }
                 } else {

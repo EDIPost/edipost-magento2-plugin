@@ -51,11 +51,20 @@
                     <config_path>edipost/printers/printer</config_path>
                     <comment>some text.</comment>
                 </field>
-                <field id="printer_rfid" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="check_printer" translate="Check printer" type="button" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Check printer</label>
+                    <frontend_model>Edipost\Shipment\Block\System\Config\Form\ButtonPdf</frontend_model>
+                </field>
+
+                <field id="printer_rfid" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Label Printer(RFID)</label>
                     <source_model>Edipost\Shipment\Model\Config\Source\Printers</source_model>
                     <config_path>edipost/printers/printer_rfid</config_path>
                     <comment>some text.</comment>
+                </field>
+                <field id="check_printer_rfid" translate="Check printer" type="button" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Check printer(RFID)</label>
+                    <frontend_model>Edipost\Shipment\Block\System\Config\Form\ButtonRaw</frontend_model>
                 </field>
                 <comment>
                     <![CDATA[some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text. some text.]]>
