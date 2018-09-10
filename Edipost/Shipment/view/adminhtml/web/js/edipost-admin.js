@@ -95,10 +95,7 @@ require([
     $('#edipost_check_printer_rfid').on('click', function (e) {
         e.preventDefault();
         var printerName = $('#shipment_printers_printer_rfid').val(),
-            zplData = '^XA^LH 80,80\n' +
-                '^FO20,10^ADN,200,40^FDHello World^FS\n' +
-                '^LH0,0\n' +
-                '^XZ';
+            zplData = '^XA^CI28^FO56,56^GB728,792,2.4,B,0^FS^FO40,160^A0N,176,176^FB760,1,0,C,0^FH^FDDEMO^FS^FO40,320^A0N,176,176^FB760,1,0,C,0^FH^FDPRINT^FS^FO40,560^A0N,80,80^FB760,1,0,C,0^FH^FD99 x 104 mm label^FS^FO40,680^A0N,80,80^FB760,1,0,C,0^FH^FDwww.edipost.no^FS^XZ';
 
         startPrintRaw(zplData, printerName)
     });
@@ -106,7 +103,7 @@ require([
     $('#edipost_check_printer').on('click', function (e) {
         e.preventDefault();
         var printerName = $('#shipment_printers_printer').val(),
-            url = 'http://che.org.il/wp-content/uploads/2016/12/pdf-sample.pdf';
+            url = 'http://no.pbshipment.com/demo-label.pdf';
 
         startPrintPdf(url, printerName);
     });
