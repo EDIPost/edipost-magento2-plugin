@@ -43,8 +43,8 @@ class ButtonPdf extends \Magento\Config\Block\System\Config\Form\Field
     {
         $this->addData(
             [
-                'id'        => 'edipost_check_printer',
-                'button_label'     => 'Check printer'
+                'id'           => 'edipost_check_printer',
+                'button_label' => 'Print test label'
             ]
         );
         return $this->_toHtml();

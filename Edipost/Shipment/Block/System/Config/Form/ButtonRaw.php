@@ -43,8 +43,8 @@ class ButtonRaw extends \Magento\Config\Block\System\Config\Form\Field
     {
         $this->addData(
             [
-                'id'        => 'edipost_check_printer_rfid',
-                'button_label'     => 'Check printer(RFID)'
+                'id'           => 'edipost_check_printer_rfid',
+                'button_label' => 'Print test label (RFID)'
             ]
         );
         return $this->_toHtml();
