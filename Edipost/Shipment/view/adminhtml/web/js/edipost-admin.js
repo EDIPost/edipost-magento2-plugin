@@ -69,10 +69,10 @@ require([
      * Call this function to start RAW print
      */
     function startPrintRaw(zplData, printerName) {
-
         lp.printRaw(zplData, printerName, function (data) {
-            alert( 'OK');
+            $('body').loader('hide');
         }, function (data) {
+            $('body').loader('hide');
             alert('Error when printing RAW: ' + data.ErrorText);
         });
     }
@@ -82,8 +82,9 @@ require([
      */
     function startPrintPdf(url, printerName) {
         lp.printPdf( url, printerName, function(data) {
-            alert( 'OK');
+            $('body').loader('hide');
         }, function(data) {
+            $('body').loader('hide');
             alert('Error when printing PDF: ' + data.ErrorText);
         });
     }
@@ -102,6 +103,9 @@ require([
 
     $('#edipost_check_printer').on('click', function (e) {
         e.preventDefault();
+
+        $('body').loader('show');
+
         var printerName = $('#shipment_printers_printer').val(),
             url = 'http://no.pbshipment.com/demo-label.pdf';
 
