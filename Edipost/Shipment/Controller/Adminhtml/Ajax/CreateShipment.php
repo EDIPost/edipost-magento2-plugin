@@ -10,6 +10,7 @@ use EdipostService\Client\Builder\ConsigneeBuilder;
 use EdipostService\Client\Builder\ConsignmentBuilder;
 use EdipostService\Client\Item;
 use EdipostService\EdipostService;
+use EdipostService\ServiceConnection\WebException;
 
 
 class CreateShipment extends \Magento\Backend\App\AbstractAction
@@ -199,6 +200,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
             $shipment->setPackages($package);
             $shipment->register();
             $shipment->getOrder()->setIsInProcess(true);
+
             try {
                 $shipment->save();
                 $shipment->getOrder()->save();
@@ -212,7 +214,6 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
             $this->shipmentWorker->createTrackData($shipment, $newConsignment->shipmentNumber, 'custom', 'edipost');
 
             if ($product_id == 727) {
-//                $pdf_raw = base64_encode($this->_api->printConsignmentZpl($newConsignment->id));
                 $pdf_raw = $this->_api->printConsignmentZpl($newConsignment->id);
             }
 
@@ -227,15 +228,19 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
 
         } catch (WebException $exception) {
             $error = $exception->getMessage();
-        } catch (Exception $exception) {
+			$result->setHttpResponseCode(400);
+
+        } catch (\Exception $exception) {
             $error = $exception->getMessage();
+			$result->setHttpResponseCode(500);
         }
 
+
         return $result->setData([
-            'error' => $error,
+            'error'      => $error,
             'product_id' => $product_id,
-            'pdf' => $pdf,
-            'pdf_raw' => $pdf_raw,
+            'pdf'        => $pdf,
+            'pdf_raw'    => $pdf_raw,
         ]);
     }
 }

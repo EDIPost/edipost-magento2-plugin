@@ -26,6 +26,9 @@ require([
     }
 
 
+    /**
+     * Open address in www.edipost.no
+     */
     $('#edipost-open').on('click', function (e) {
         e.preventDefault();
 
@@ -60,6 +63,9 @@ require([
     });
 
 
+    /**
+     * Create consignment using the API
+     */
     $('#edipost-create').on('click', function (e) {
         e.preventDefault();
         var e_alert = 0;
@@ -94,25 +100,27 @@ require([
                         lp.printRaw(raw, EDIPOST_PRINTER, function (data) {
                             message( 'OK', 'success');
                         }, function (data) {
-                            message('Error when printing RFID label. Error message: ' + data.statusText, 'error');
+                            message('Error when printing RFID label: ' + data.statusText, 'error');
                         });
 
                     } else {    // All other products
                         lp.printPdf( pdf, EDIPOST_PRINTER, function(data) {
                             message( 'OK', 'success');
                         }, function(data) {
-                            message( 'Error when printing PDF, download <a href="' + pdf + '" target="_blank">label</a> manually. Error message: ' + data.statusText );
+                            message( 'Error when printing PDF. Make sure the print engine is started.<br>' +
+                                'Download and print the <a href="' + pdf + '" target="_blank">label</a> manually.' );
                         });
                     }
 
                 } else {
-                    message( 'Error when creating consignment. Error message: ' + data.statusText );
+                    message( 'Error when creating consignment: ' + data.responseJSON.error, 'error' );
                 }
             },
             error: function (data) {
                 $('#edipost-create').attr("disabled", false);
                 $('body').loader('hide');
-                console.log(JSON.stringify(data));
+
+                message( 'Error when creating consignment: ' + data.responseJSON.error, 'error' );
             }
         });
     });
