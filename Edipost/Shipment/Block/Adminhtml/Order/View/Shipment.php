@@ -118,11 +118,11 @@ class Shipment extends Template
      *
      * @return object
      */
-    public function getShipingMethods()
+    public function getShippingMethods()
     {
         $items = [];
         $error = '';
-        $shippingData = $this->getShipingAdress();
+        $shippingData = $this->getShippingAdress();
         $options = [];
 
         foreach ($this->_order->getAllItems() as $product) {
@@ -139,14 +139,21 @@ class Shipment extends Template
 
         try {
             $products = $this->_api->getAvailableProducts($shippingData['fromZipCode'], $shippingData['fromCountryCode'], $shippingData['toZipCode'], $shippingData['toCountryCode'], $items);
-//            $products =  $this->_api->getAvailableProducts( (string)$shippingData['fromZipCode'], $shippingData['fromCountryCode'], (string)'1337', 'NO', $items ); // test data
+
             foreach ($products as $product) {
+            	$services = [];
+				foreach ($product->getServices() as $service) {
+					$services[] = $service->getId();
+				}
+
                 $options[] = [
                     'id' => $product->getId(),
                     'name' => $product->getName(),
-                    'status' => $product->getStatus()
+                    'status' => $product->getStatus(),
+					'service' => count($services) > 0 ? $services[0] : ''
                 ];
             }
+
         } catch (WebException $exception) {
             $error = $exception->getMessage();
         }
@@ -163,7 +170,7 @@ class Shipment extends Template
      * @return array
      */
 
-    private function getShipingAdress()
+    private function getShippingAdress()
     {
 
         $shippingAddressArray = $this->_order->getShippingAddress()->getData();

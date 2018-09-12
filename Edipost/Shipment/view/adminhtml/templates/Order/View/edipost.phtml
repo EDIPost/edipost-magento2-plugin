@@ -4,14 +4,14 @@ if (!$block->isModuleEnable()) {
 }
 ?>
 <section class="admin__page-section edipost-wrapper">
-    <?php $shipingMethods = $block->getShipingMethods(); ?>
+    <?php $shippingMethods = $block->getShippingMethods(); ?>
 
     <div class="admin__page-section-title">
         <span class="title"><?= /* @escapeNotVerified */
             __('Edipost integration') ?></span>
     </div>
 
-    <?php if ($sError = $shipingMethods->error) { ?>
+    <?php if ($sError = $shippingMethods->error) { ?>
         <label class="mage-error" style="margin-bottom: 20px;"><?= $sError ?></label>
     <?php } ?>
 
@@ -29,9 +29,8 @@ if (!$block->isModuleEnable()) {
                             __('Choose shipping method') ?></label>
                         <div class="admin__field-control">
                             <select name="edipost[ship_method]" id="edipost_ship_method" class="admin__control-select">
-                                <?php foreach ($shipingMethods->options as $option) { ?>
-                                    <option <?= ($option['status'] == 'Available') ? '' : 'disabled title="' . $option['status'] . '"' ?>
-                                            value="<?= $option['id'] ?>"><?= $option['name'] ?></option>
+                                <?php foreach ($shippingMethods->options as $option) { ?>
+                                    <option <?= ($option['status'] == 'Available') ? '' : 'disabled title="' . $option['status'] . '"' ?> value="<?= $option['id'] ?>" data-service="<?= $option['service'] ?>"><?= $option['name'] ?></option>
                                 <?php } ?>
                             </select>
                         </div>

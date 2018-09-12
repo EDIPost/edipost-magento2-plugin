@@ -84,6 +84,7 @@ require([
             data: {
                 order_id: EDIPOST_ORDER_ID,
                 product_id: $('#edipost_ship_method').val(),
+                service_id: $('#edipost_ship_method').find(":selected").data('service'),
                 reference: $('#edipost_reference').val(),
                 e_alert: e_alert,
                 form_key: window.FORM_KEY
