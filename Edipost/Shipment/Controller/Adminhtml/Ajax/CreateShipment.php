@@ -96,8 +96,10 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
             ->setContactTelefax($shippingAddressArray['fax'])
             ->setCountry($shippingAddressArray['country_id'])
             ->build();
+
         $pdf = '';
         $pdf_raw = '';
+        $pdf_content = '';
 
         try {
             $newConsignee = $this->_api->createConsignee($consignee);
@@ -142,6 +144,12 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
 
             $newConsignment = $this->_api->createConsignment($consignment->build());
 
+
+
+
+            //
+			// Create new shipment under Magento order (not the same as consignment in Edipost)
+			//
 
             //$this->shipmentWorker->deleteShipments($order);
 
@@ -213,11 +221,16 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
 
             $this->shipmentWorker->createTrackData($shipment, $newConsignment->shipmentNumber, 'custom', 'edipost');
 
+
+
+            //
+			// Print label
+			//
             if ($product_id == 727) {
                 $pdf_raw = $this->_api->printConsignmentZpl($newConsignment->id);
-            }
-
-            $pdf_content = $this->_api->printConsignment($newConsignment->id);
+            } else {
+				$pdf_content = $this->_api->printConsignment($newConsignment->id);
+			}
 
             $media = $this->filesystem->getDirectoryWrite($this->directoryList::MEDIA);
             $file__media_path = "edipost" . DIRECTORY_SEPARATOR . $newConsignment->id . "_consignment.pdf";
@@ -226,11 +239,11 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction
             $pdf = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $file__media_path;
 
 
-        } catch (WebException $exception) {
+        } catch (WebException $exception) {	// Errors from edipost client library
             $error = $exception->getMessage();
 			$result->setHttpResponseCode(400);
 
-        } catch (\Exception $exception) {
+        } catch (\Exception $exception) {	// Other errors
             $error = $exception->getMessage();
 			$result->setHttpResponseCode(500);
         }

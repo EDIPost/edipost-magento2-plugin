@@ -26,7 +26,7 @@ if (!$block->isModuleEnable()) {
 
                     <div class="admin__field">
                         <label for="edipost_ship_method" class="admin__field-label"><?= /* @escapeNotVerified */
-                            __('Chose shipping method') ?></label>
+                            __('Choose shipping method') ?></label>
                         <div class="admin__field-control">
                             <select name="edipost[ship_method]" id="edipost_ship_method" class="admin__control-select">
                                 <?php foreach ($shipingMethods->options as $option) { ?>
@@ -39,10 +39,9 @@ if (!$block->isModuleEnable()) {
 
                     <div class="admin__field">
                         <label for="edipost_reference" class="admin__field-label"><?= /* @escapeNotVerified */
-                            __('Reference text(optional)') ?></label>
+                            __('Reference text (optional)') ?></label>
                         <div class="admin__field-control">
-                            <textarea name="edipost[reference]" rows="3" cols="5" id="edipost_reference"
-                                      class="admin__control-textarea"></textarea>
+                            <textarea name="edipost[reference]" style="width: 50%; height: 60px;" id="edipost_reference" class="admin__control-textarea"></textarea>
                         </div>
                     </div>
 

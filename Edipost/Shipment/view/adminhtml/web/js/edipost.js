@@ -96,8 +96,8 @@ require([
                     var pdf = data.pdf;
                     var raw = data.pdf_raw;
 
-                    if(data.product_id === 727) {   // PiP
-                        lp.printRaw(raw, EDIPOST_PRINTER, function (data) {
+                    if(data.product_id == '727') {   // PiP
+                        lp.printRaw(raw, EDIPOST_PRINTER_RFID, function (data) {
                             message( 'OK', 'success');
                         }, function (data) {
                             message('Error when printing RFID label: ' + data.statusText, 'error');
