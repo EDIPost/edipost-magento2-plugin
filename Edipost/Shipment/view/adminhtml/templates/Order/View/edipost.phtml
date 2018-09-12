@@ -40,15 +40,14 @@ if (!$block->isModuleEnable()) {
                         <label for="edipost_reference" class="admin__field-label"><?= /* @escapeNotVerified */
                             __('Reference text (optional)') ?></label>
                         <div class="admin__field-control">
-                            <textarea name="edipost[reference]" style="width: 50%; height: 60px;" id="edipost_reference" class="admin__control-textarea"></textarea>
+                            <textarea name="edipost[reference]" style="width: 313px; height: 60px;" id="edipost_reference" class="admin__control-textarea"></textarea>
                         </div>
                     </div>
 
                     <div class="admin__field">
                         <div class="edipost-e-allert-options">
                             <div class="admin__field admin__field-option">
-                                <input type="checkbox" name="edipost[e_alert]"  id="edipost_e_alert"
-                                       class="admin__control-checkbox">
+                                <input type="checkbox" name="edipost[e_alert]" id="edipost_e_alert" class="admin__control-checkbox" checked>
                                 <label for="edipost_e_alert" class="admin__field-label"><?= /* @escapeNotVerified */
                                     __('Electronic alert on SMS/Email') ?></label>
                             </div>
