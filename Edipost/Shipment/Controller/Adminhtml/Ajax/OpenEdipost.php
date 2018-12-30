@@ -58,7 +58,8 @@ class OpenEdipost extends \Magento\Backend\App\AbstractAction {
 
         $consignee = $builder
             ->setCompanyName( $company_name )
-            ->setCustomerNumber( (string)$order->getCustomerId() )
+            //->setCustomerNumber( (string)$order->getCustomerId() )
+            ->setCustomerNumber( '0' )
             ->setPostAddress( $shippingAddressArray['street'] )
             ->setPostZip( $shippingAddressArray['postcode'] )
             ->setPostCity( $shippingAddressArray['city'] )
