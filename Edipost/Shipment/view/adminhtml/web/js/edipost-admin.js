@@ -107,7 +107,7 @@ require([
         $('body').loader('show');
 
         var printerName = $('#shipment_printers_printer').val(),
-            url = 'http://no.pbshipment.com/demo-label.pdf';
+            url = 'https://app.edipost.no/demo-label.pdf';
 
         startPrintPdf(url, printerName);
     });

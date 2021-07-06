@@ -25,7 +25,7 @@ class EdipostService {
 	 * @param mixed $apiKey
 	 * @param string $apiUrl
 	 */
-	public function __construct($apiKey = null, $apiUrl = 'https://api.pbshipment.com') {
+	public function __construct($apiKey = null, $apiUrl = 'https://api.edipost.no') {
 		if (isset($apiKey)) {
 			$this->connect($apiKey, $apiUrl);
 		}

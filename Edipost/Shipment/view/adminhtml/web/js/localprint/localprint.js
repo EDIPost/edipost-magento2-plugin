@@ -141,25 +141,25 @@
 
 
         this.getPrinters = function (successCallback, errorCallback) {
-            var url = 'https://localhost.pbshipment.com:58935/Printers';
+            var url = 'https://localhost.edipost.no:58935/Printers';
             ajaxGet(url, successCallback, errorCallback);
         };
 
 
         this.getVersion = function (successCallback, errorCallback) {
-            var url = 'https://localhost.pbshipment.com:58935/Version';
+            var url = 'https://localhost.edipost.no:58935/Version';
             ajaxGet(url, successCallback, errorCallback);
         };
 
 
         this.printPdf = function (pdfUrl, printerName, successCallback, errorCallback) {
-            var url = 'https://localhost.pbshipment.com:58935/Print?pdf=' + pdfUrl + '&printer=' + printerName;
+            var url = 'https://localhost.edipost.no:58935/Print?pdf=' + pdfUrl + '&printer=' + printerName;
             ajaxGet(url, successCallback, errorCallback);
         }
 
 
         this.printRaw = function (data, printerName, successCallback, errorCallback) {
-            var url = 'https://localhost.pbshipment.com:58935/PrintRaw?printer=' + printerName;
+            var url = 'https://localhost.edipost.no:58935/PrintRaw?printer=' + printerName;
             ajaxPost(url, data, successCallback, errorCallback);
         }
 

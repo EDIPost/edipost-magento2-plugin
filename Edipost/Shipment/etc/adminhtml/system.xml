@@ -54,7 +54,7 @@
                 <label>Printer Settings</label>
 
                 <comment>
-                    <![CDATA[Install the Localprint application to print shipping labels. Download <a href="https://no.pbshipment.com/_Plugins/EDIPost/Templates/PBEDIPost/bin/edipost-printengine.exe" target="_blank">the installer</a> and follow the on-screen instructions. Make sure Print engine has status <span style="color: green;">Active</span> before printing. Read more about the integration and printing in our <a href="https://edipost.freshdesk.com/support/solutions/articles/9000154252-magento-2" target="_blank">online guide</a>.]]>
+                    <![CDATA[Install the Localprint application to print shipping labels. Download <a href="https://app.edipost.no/_Plugins/EDIPost/Templates/PBEDIpost//bin/edipost-printengine.exe" target="_blank">the installer</a> and follow the on-screen instructions. Make sure Print engine has status <span style="color: green;">Active</span> before printing. Read more about the integration and printing in our <a href="https://edipost.freshdesk.com/support/solutions/articles/9000154252-magento-2" target="_blank">online guide</a>.]]>
                 </comment>
 
                 <field id="printer" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
