@@ -96,8 +96,8 @@ require([
                 if( ! data.error ){
                     var pdf = data.pdf;
                     var raw = data.pdf_raw;
-
-                    if(data.product_id == '727') {   // PiP
+                    
+                    if(data.product_id == '761' || data.product_id == '763') {   // PiP
                         lp.printRaw(raw, EDIPOST_PRINTER_RFID, function (data) {
                             message( 'OK', 'success');
                         }, function (data) {

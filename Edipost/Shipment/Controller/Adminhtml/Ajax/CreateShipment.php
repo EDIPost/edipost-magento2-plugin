@@ -228,7 +228,7 @@ class CreateShipment extends \Magento\Backend\App\AbstractAction {
 			//
 			// Print label
 			//
-			if ($product_id == 727) {
+			if ($product_id == 761 || $product_id == 763) {
 				$pdf_raw = $this->_api->printConsignmentZpl($newConsignment->id);
 			} else {
 				$pdf_content = $this->_api->printConsignment($newConsignment->id);
